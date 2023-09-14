@@ -1,6 +1,6 @@
 {
   "name": "pack-atlas",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a simple atlas packer for Node.js",
   "main": "index.js",
   "scripts": {

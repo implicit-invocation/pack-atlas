@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { loadImage } from "canvas";
 import fs from "fs";
 import { glob } from "glob";
