@@ -1,0 +1,27 @@
+{
+  "name": "pack-atlas",
+  "version": "1.0.0",
+  "description": "a simple atlas packer for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
+    "run-dev": "npm run tsc && node bin"
+  },
+  "bin": "./bin/index.js",
+  "keywords": [],
+  "author": "implicit-invocation",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/gl": "^6.0.2",
+    "@types/node": "^20.6.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "gl": "^6.0.2",
+    "glob": "^10.3.4",
+    "maxrects-packer": "^2.7.3",
+    "yaml": "^2.3.2"
+  }
+}
