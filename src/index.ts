@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-
-import { loadImage } from "canvas";
 import fs from "fs";
 import { glob } from "glob";
 import { MaxRectsPacker } from "maxrects-packer";
 import Path from "path";
 import yaml from "yaml";
 import { writeImage } from "./lib/file";
-import { drawBin, trimTransparentPixels } from "./lib/image";
-import { generateAtlasInfo } from "./lib/name";
+import { drawBin, loadImageFile, trimTransparentPixels } from "./lib/image";
 import { PackingOptions } from "./lib/types";
 
 const defaultPackingOptions: PackingOptions = {
@@ -47,7 +44,7 @@ const pack = async (
 
   const dir = await glob(imagePath);
   for (let file of dir) {
-    const image = await loadImage(file);
+    const image = await loadImageFile(file);
     const bound = options.trim
       ? trimTransparentPixels(image)
       : {
@@ -71,10 +68,16 @@ const pack = async (
 
     const imageFileName = i === 0 ? `${name}.png` : `${name}_${i}.png`;
     const imageFilePath = Path.join(outDir, imageFileName);
-    await writeImage(imageFilePath, buffer, options.pngquant);
+    await writeImage(
+      imageFilePath,
+      buffer,
+      bin.width,
+      bin.height,
+      options.pngquant
+    );
 
-    const atlasInfo = generateAtlasInfo(imageFileName, bin, options);
-    fs.appendFileSync(Path.join(outDir, `${name}.atlas`), atlasInfo);
+    // const atlasInfo = generateAtlasInfo(imageFileName, bin, options);
+    // fs.appendFileSync(Path.join(outDir, `${name}.atlas`), atlasInfo);
   }
 };
 const run = async () => {

@@ -27,16 +27,22 @@
   },
   "license": "ISC",
   "devDependencies": {
+    "@types/get-pixels": "^3.3.2",
     "@types/gl": "^6.0.2",
     "@types/node": "^20.6.0",
+    "@types/save-pixels": "^2.3.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "canvas": "^2.11.2",
+    "gdxts": "^0.2.5",
+    "get-pixels": "^3.3.3",
     "gl": "^6.0.2",
     "glob": "^10.3.4",
     "maxrects-packer": "^2.7.3",
+    "ndarray": "^1.0.19",
     "pngquant": "^4.2.0",
+    "save-pixels": "^2.3.6",
     "yaml": "^2.3.2"
   }
 }

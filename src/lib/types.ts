@@ -1,4 +1,4 @@
-import { Image } from "canvas";
+import { ImageFileData } from "./image";
 
 export interface PackingOptions {
   maxWidth?: number;
@@ -20,7 +20,7 @@ export interface Bound {
 }
 
 export interface RectData {
-  image: Image;
+  image: ImageFileData;
   name: string;
   bound: Bound;
 }

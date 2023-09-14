@@ -1,19 +1,17 @@
-import { Canvas, Image } from "canvas";
+import { ImageSource, OrthoCamera, PolygonBatch, Texture } from "gdxts";
+import getPixels from "get-pixels";
+import createGl from "gl";
 import { Bin, Rectangle } from "maxrects-packer";
 import { Bound, PackingOptions, RectData } from "./types";
 
-export const trimTransparentPixels = (image: Image): Bound => {
+export const trimTransparentPixels = (image: ImageFileData): Bound => {
   const bound = {
     x: 0,
     y: 0,
     width: image.width,
     height: image.height,
   };
-  const canvas = new Canvas(image.width, image.height);
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(image, 0, 0);
-  const imageData = ctx.getImageData(0, 0, image.width, image.height);
-  const { data } = imageData;
+  const data = new Uint8ClampedArray(image.buffer);
   let top = 0;
   let bottom = image.height;
   let left = 0;
@@ -84,47 +82,60 @@ export const trimTransparentPixels = (image: Image): Bound => {
 export const drawBin = (
   bin: Bin<Rectangle>,
   options: PackingOptions
-): Buffer => {
-  const canvas = new Canvas(bin.width, bin.height);
-  const ctx = canvas.getContext("2d");
-  ctx.patternQuality = options.filter === "linear" ? "bilinear" : "nearest";
-  ctx.quality = options.filter === "linear" ? "bilinear" : "nearest";
+): Uint8Array => {
+  const gl = createGl(bin.width, bin.height, { preserveDrawingBuffer: true });
+  const batch = new PolygonBatch(gl);
+  batch.setYDown(true);
+  const camera = new OrthoCamera(bin.width, bin.height, bin.width, bin.height);
+  camera.setYDown(true);
+  camera.update();
 
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.viewport(0, 0, bin.width, bin.height);
+
+  const white = new Texture(
+    gl,
+    new ImageSource(1, 1, new Uint8Array([255, 255, 255, 255]).buffer)
+  );
+  batch.setProjection(camera.combined);
+  batch.begin();
   for (let rect of bin.rects) {
     const { image, bound }: RectData = rect.data;
+    // const texture = new Texture(
+    //   gl,
+    //   new ImageSource(image.width, image.height, image.buffer)
+    // );
 
-    if (rect.rot) {
-      ctx.translate(rect.x, rect.y);
-      ctx.rotate(-Math.PI / 2);
-      ctx.translate(-rect.x, -rect.y);
-
-      ctx.drawImage(
-        image,
-        bound.x,
-        bound.y,
-        bound.width,
-        bound.height,
-        rect.x - bound.width,
-        rect.y,
-        bound.width,
-        bound.height
-      );
-
-      ctx.setTransform();
-    } else {
-      ctx.drawImage(
-        image,
-        bound.x,
-        bound.y,
-        bound.width,
-        bound.height,
-        rect.x,
-        rect.y,
-        bound.width,
-        bound.height
-      );
-    }
+    batch.draw(white, rect.x, rect.y, bound.width, bound.height);
   }
-  const buffer = canvas.toBuffer("image/png");
-  return buffer;
+  batch.end();
+
+  var pixels = new Uint8Array(bin.width * bin.height * 4);
+  gl.readPixels(0, 0, bin.width, bin.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+  return pixels;
 };
+
+export interface ImageFileData {
+  width: number;
+  height: number;
+  buffer: ArrayBufferLike;
+}
+
+export const loadImageFile = async (file: string): Promise<ImageFileData> =>
+  new Promise((resolve, reject) => {
+    getPixels(file, (err, pixels) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const { shape, data } = pixels;
+      resolve({
+        width: shape[0],
+        height: shape[1],
+        buffer: data.buffer,
+      });
+    });
+  });
