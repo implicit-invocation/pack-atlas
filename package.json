@@ -9,8 +9,18 @@
     "run-dev": "npm run tsc && node bin"
   },
   "bin": "./bin/index.js",
-  "keywords": [],
+  "keywords": [
+    "texture",
+    "texture-atlas",
+    "command-line",
+    "maxrects"
+  ],
   "author": "implicit-invocation",
+  "homepage": "https://github.com/implicit-invocation/pack-atlas.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/implicit-invocation/pack-atlas.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/gl": "^6.0.2",
