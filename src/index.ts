@@ -5,11 +5,11 @@ import fs from "fs";
 import { glob } from "glob";
 import { MaxRectsPacker } from "maxrects-packer";
 import Path from "path";
+import yaml from "yaml";
+import { writeImage } from "./lib/file";
 import { drawBin, trimTransparentPixels } from "./lib/image";
 import { generateAtlasInfo } from "./lib/name";
 import { PackingOptions } from "./lib/types";
-
-import yaml from "yaml";
 
 const defaultPackingOptions: PackingOptions = {
   maxWidth: 2048,
@@ -20,6 +20,7 @@ const defaultPackingOptions: PackingOptions = {
   smart: true,
   filter: "linear",
   trim: true,
+  pngquant: false,
 };
 
 const pack = async (
@@ -70,7 +71,7 @@ const pack = async (
 
     const imageFileName = i === 0 ? `${name}.png` : `${name}_${i}.png`;
     const imageFilePath = Path.join(outDir, imageFileName);
-    fs.writeFileSync(imageFilePath, buffer);
+    await writeImage(imageFilePath, buffer, options.pngquant);
 
     const atlasInfo = generateAtlasInfo(imageFileName, bin, options);
     fs.appendFileSync(Path.join(outDir, `${name}.atlas`), atlasInfo);

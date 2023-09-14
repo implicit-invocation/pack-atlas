@@ -1,6 +1,6 @@
 {
   "name": "pack-atlas",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "a simple atlas packer for Node.js",
   "main": "index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "gl": "^6.0.2",
     "glob": "^10.3.4",
     "maxrects-packer": "^2.7.3",
+    "pngquant": "^4.2.0",
     "yaml": "^2.3.2"
   }
 }

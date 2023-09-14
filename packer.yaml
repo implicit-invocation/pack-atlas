@@ -9,6 +9,7 @@ character_action:
   smart: true
   filter: linear
   trim: true
+  pngquant: true
 
 character_action_2:
   images: images/*.png

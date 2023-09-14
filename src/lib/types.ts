@@ -9,6 +9,7 @@ export interface PackingOptions {
   smart?: boolean;
   filter?: "linear" | "nearest";
   trim?: boolean;
+  pngquant?: boolean;
 }
 
 export interface Bound {
