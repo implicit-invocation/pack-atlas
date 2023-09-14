@@ -66,6 +66,14 @@ const pack = async (
   packer.save();
 
   // TODO: should we delete the old files?
+  const existingImageFiles = await glob(Path.join(outDir, `${name}*.png`));
+  for (let file of existingImageFiles) {
+    fs.unlinkSync(file);
+  }
+  if (fs.existsSync(Path.join(outDir, `${name}.atlas`))) {
+    fs.unlinkSync(Path.join(outDir, `${name}.atlas`));
+  }
+
   for (let i = 0; i < packer.bins.length; i++) {
     const bin = packer.bins[i];
     const buffer = drawBin(bin, options);
