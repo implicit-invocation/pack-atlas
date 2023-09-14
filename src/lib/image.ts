@@ -93,6 +93,7 @@ export const drawBin = (
   for (let rect of bin.rects) {
     const { image, bound }: RectData = rect.data;
 
+    // TODO: fix this
     if (rect.rot) {
       ctx.translate(rect.x, rect.y);
       ctx.rotate(-Math.PI / 2);

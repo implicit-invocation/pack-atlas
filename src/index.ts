@@ -65,6 +65,7 @@ const pack = async (
 
   packer.save();
 
+  // TODO: should we delete the old files?
   for (let i = 0; i < packer.bins.length; i++) {
     const bin = packer.bins[i];
     const buffer = drawBin(bin, options);
