@@ -1,11 +1,12 @@
 {
   "name": "pack-atlas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a simple atlas packer for Node.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
+    "prepare": "npm run tsc",
     "run-dev": "npm run tsc && node bin"
   },
   "bin": "./bin/index.js",
@@ -14,6 +15,9 @@
     "texture-atlas",
     "command-line",
     "maxrects"
+  ],
+  "files": [
+    "bin"
   ],
   "author": "implicit-invocation",
   "homepage": "https://github.com/implicit-invocation/pack-atlas.git",
