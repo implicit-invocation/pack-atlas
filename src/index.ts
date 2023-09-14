@@ -65,7 +65,6 @@ const pack = async (
 
   packer.save();
 
-  // TODO: should we delete the old files?
   const existingImageFiles = await glob(Path.join(outDir, `${name}*.png`));
   for (let file of existingImageFiles) {
     fs.unlinkSync(file);
