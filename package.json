@@ -1,6 +1,6 @@
 {
   "name": "pack-atlas",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "a simple atlas packer for Node.js",
   "main": "index.js",
   "scripts": {
@@ -27,13 +27,11 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@types/gl": "^6.0.2",
     "@types/node": "^20.6.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "canvas": "^2.11.2",
-    "gl": "^6.0.2",
     "glob": "^10.3.4",
     "maxrects-packer": "^2.7.3",
     "pngquant": "^4.2.0",
