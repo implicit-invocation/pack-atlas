@@ -43,7 +43,7 @@ export const generateAtlasInfo = (
     atlasInfo += `  rotate: ${rect.rot ? "true" : "false"}\n`;
     atlasInfo += `  xy: ${rect.x}, ${rect.y}\n`;
     atlasInfo += `  size: ${data.bound.width}, ${data.bound.height}\n`;
-    atlasInfo += `  orig: ${data.image.width}, ${data.image.height}\n`;
+    atlasInfo += `  orig: ${data.image.getWidth()}, ${data.image.getHeight()}\n`;
     atlasInfo += `  offset: ${data.bound.x}, ${data.bound.y}\n`;
     atlasInfo += `  index: ${id.index}\n`;
   }

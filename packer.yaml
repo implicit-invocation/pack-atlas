@@ -4,7 +4,7 @@ character_action:
   outDir: atlas
   maxWidth: 2048
   maxHeight: 2048
-  padding: 10
+  padding: 20
   allowRotation: true
   square: true
   smart: true

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { loadImage } from "canvas";
 import fs from "fs";
 import { glob } from "glob";
+import Jimp from "jimp";
 import { MaxRectsPacker } from "maxrects-packer";
 import Path from "path";
 import yaml from "yaml";
@@ -47,14 +47,14 @@ const pack = async (
 
   const dir = await glob(imagePath);
   for (let file of dir) {
-    const image = await loadImage(file);
+    const image = await Jimp.read(file);
     const bound = options.trim
       ? trimTransparentPixels(image)
       : {
           x: 0,
           y: 0,
-          width: image.width,
-          height: image.height,
+          width: image.getWidth(),
+          height: image.getHeight(),
         };
     packer.add(bound.width, bound.height, {
       image,
@@ -75,10 +75,12 @@ const pack = async (
 
   for (let i = 0; i < packer.bins.length; i++) {
     const bin = packer.bins[i];
-    const buffer = drawBin(bin, options);
 
     const imageFileName = i === 0 ? `${name}.png` : `${name}_${i}.png`;
     const imageFilePath = Path.join(outDir, imageFileName);
+
+    const jimp = drawBin(bin);
+    const buffer = await jimp.getBufferAsync(Jimp.MIME_PNG);
     await writeImage(imageFilePath, buffer, options.pngquant);
 
     const atlasInfo = generateAtlasInfo(imageFileName, bin, options);
