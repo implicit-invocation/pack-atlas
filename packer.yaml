@@ -1,24 +1,24 @@
 character_action:
   images: images/*.png
+  # outDir: ../new-platformer/public/assets/atlas
   outDir: atlas
   maxWidth: 2048
   maxHeight: 2048
-  padding: 2
+  padding: 10
   allowRotation: true
   square: true
   smart: true
   filter: linear
   trim: true
   pngquant: true
-
-character_action_2:
-  images: images/*.png
-  outDir: atlas
-  maxWidth: 2048
-  maxHeight: 2048
-  padding: 2
-  allowRotation: false
-  square: true
-  smart: true
-  filter: linear
-  trim: false
+# character_action_2:
+#   images: images/*.png
+#   outDir: atlas
+#   maxWidth: 2048
+#   maxHeight: 2048
+#   padding: 2
+#   allowRotation: false
+#   square: true
+#   smart: true
+#   filter: linear
+#   trim: false

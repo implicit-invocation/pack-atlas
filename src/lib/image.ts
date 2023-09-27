@@ -1,6 +1,23 @@
-import { Canvas, Image } from "canvas";
+import { Canvas, Image, ImageData, createImageData } from "canvas";
 import { Bin, Rectangle } from "maxrects-packer";
 import { Bound, PackingOptions, RectData } from "./types";
+
+export const imageToImageData = (image: Image, bound: Bound): ImageData => {
+  const canvas = new Canvas(bound.width, bound.height);
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(
+    image,
+    bound.x,
+    bound.y,
+    bound.width,
+    bound.height,
+    0,
+    0,
+    bound.width,
+    bound.height
+  );
+  return ctx.getImageData(0, 0, bound.width, bound.height);
+};
 
 export const trimTransparentPixels = (image: Image): Bound => {
   const bound = {
@@ -92,37 +109,33 @@ export const drawBin = (
 
   for (let rect of bin.rects) {
     const { image, bound }: RectData = rect.data;
-
+    const data = imageToImageData(image, bound);
     if (rect.rot) {
-      ctx.translate(rect.x, rect.y);
-      ctx.rotate(-Math.PI / 2);
-      ctx.translate(-rect.x, -rect.y);
+      const width = data.width;
+      const height = data.height;
 
-      ctx.drawImage(
-        image,
-        bound.x,
-        bound.y,
-        bound.width,
-        bound.height,
-        rect.x - bound.width,
-        rect.y,
-        bound.width,
-        bound.height
+      const rotatedImageData = createImageData(
+        new Uint8ClampedArray(width * height * 4),
+        height,
+        width
       );
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+          const newX = y;
+          const newY = width - x - 1;
 
-      ctx.setTransform();
+          const pos = y * width + x;
+          const newPos = newY * height + newX;
+
+          rotatedImageData.data[newPos * 4 + 0] = data.data[pos * 4 + 0];
+          rotatedImageData.data[newPos * 4 + 1] = data.data[pos * 4 + 1];
+          rotatedImageData.data[newPos * 4 + 2] = data.data[pos * 4 + 2];
+          rotatedImageData.data[newPos * 4 + 3] = data.data[pos * 4 + 3];
+        }
+      }
+      ctx.putImageData(rotatedImageData, rect.x, rect.y);
     } else {
-      ctx.drawImage(
-        image,
-        bound.x,
-        bound.y,
-        bound.width,
-        bound.height,
-        rect.x,
-        rect.y,
-        bound.width,
-        bound.height
-      );
+      ctx.putImageData(data, rect.x, rect.y);
     }
   }
   const buffer = canvas.toBuffer("image/png");
